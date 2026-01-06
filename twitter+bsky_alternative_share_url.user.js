@@ -14,8 +14,6 @@
 // @match        https://bsky.app/*
 // @icon         https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png
 
-// @downloadURL https://update.greasyfork.org/scripts/491145/Twitter%20Alternative%20Share%20URL.user.js
-// @updateURL https://update.greasyfork.org/scripts/491145/Twitter%20Alternative%20Share%20URL.meta.js
 // ==/UserScript==
 
 const baseXUrl = 'https://fixvx.com';
