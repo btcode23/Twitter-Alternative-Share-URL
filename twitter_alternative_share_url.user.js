@@ -116,7 +116,7 @@ function designButton(tweet) {
             newIcon.querySelector('path').style.stroke = 'rgba(29, 161, 242, 1)';
         } else {
             newIcon.style.borderRadius = '50%';
-            newIcon.style.backgroundColor = getComputedStyle(document.querySelector('[data-testid="userBannerFallback"]')).backgroundColor;
+            newIcon.style.backgroundColor = getComputedStyle(document.querySelector('[data-testid="userAvatarImage"]')).backgroundColor;
         }
     });
 
