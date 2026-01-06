@@ -4,7 +4,7 @@
 ### This script adds a button to share a tweet with an alterantive URL than the default "X" link.</br>The purpose is to easily share tweets to another platform but with a different URL for embedding reasons.</br>(Example: posting on Discord using fixvx)
 #### Also added support for Bsky but UI won't be updated as quickly as X if an issue occurs.
 
-
+--------------------
 ![alt text](https://raw.githubusercontent.com/btcode23/Twitter-Fix-URL/main/button-screenshot.png)
 ##### (button when hovered over)
 ### By default, the alternative is "fixvx". However, this can be changed in the settings.
