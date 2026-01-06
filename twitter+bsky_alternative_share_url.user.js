@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Twitter Alternative Share URL
+// @name         Twitter+Bsky Alternative Share URL
 // @namespace    https://github.com/btcode23
 // @version      0.5.2
 // @description  Adds a button to share a tweet with an alternative URL to the "X" link
@@ -13,6 +13,9 @@
 // @match        https://x.com/*
 // @match        https://bsky.app/*
 // @icon         https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png
+
+// @updateURL    https://raw.githubusercontent.com/btcode23/Twitter-Alternative-Share-URL/main/twitter+bsky_alternative_share_url.user.js
+// @downloadURL   https://raw.githubusercontent.com/btcode23/Twitter-Alternative-Share-URL/main/twitter+bsky_alternative_share_url.user.js
 
 // ==/UserScript==
 
