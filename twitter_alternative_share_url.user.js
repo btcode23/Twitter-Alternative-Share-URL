@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Twitter Alternative Share URL
+// @name         X/Twitter Alternative Share URL
 // @namespace    https://github.com/btcode23
-// @version      0.5.2
+// @version      0.5.3
 // @description  Adds a button to share a tweet with an alternative URL to the "X" link
 // @author       btcode23
 // @license      MIT
@@ -67,12 +67,14 @@ function designButton(tweet) {
     newIcon.classList.add('custom-copy-icon');
     otherIcon.parentElement.insertBefore(newIcon, otherIcon.sibling);
 
-    newIcon.querySelector('svg').innerHTML = svg; // add clipboard svg
     const icon = newIcon.querySelector('svg');
-    icon.querySelector('path').style.fill = 'none';
+    icon.innerHTML = svg; // add clipboard svg
+
+    const iconPathStye = icon.querySelector('path').style;
+    iconPathStye.fill = 'none';
     const computedStyleIcon = getComputedStyle(otherIcon.querySelector('svg'));
     const iconOriginalColor = computedStyleIcon.color;
-    icon.querySelector('path').style.stroke = iconOriginalColor; // set color to same as other icon
+    iconPathStye.stroke = iconOriginalColor; // set color to same as other icon
 
     const computedContainerStyle = getComputedStyle(otherIcon);
     newIcon.style.display = computedContainerStyle.display;
@@ -80,19 +82,19 @@ function designButton(tweet) {
     newIcon.style.height = computedContainerStyle.height;
     newIcon.style.marginLeft = (parseFloat(computedContainerStyle.width) * 0.3) + "px";
 
-    const backgroundElement = icon.previousElementSibling;
+    const backgroundElement = icon.previousElementSibling.style;
 
     // highlight icon when mouseover event using twitter blue color
     // should look the same as the other icons
     newIcon.addEventListener('mouseover', function() {
-        backgroundElement.style.backgroundColor = 'rgba(29, 161, 242, 0.1)';
-        newIcon.querySelector('path').style.stroke = 'rgba(29, 161, 242, 1)';
+        backgroundElement.backgroundColor = 'rgba(29, 161, 242, 0.1)';
+        iconPathStye.stroke = 'rgba(29, 161, 242, 1)';
     });
 
     // return to original style when mouseleave event
     newIcon.addEventListener('mouseleave', function() {
-        backgroundElement.style.backgroundColor = '';
-        newIcon.querySelector('path').style.stroke = iconOriginalColor;
+        backgroundElement.backgroundColor = '';
+        iconPathStye.stroke = iconOriginalColor;
     });
 
     // copy link using alternative domain
