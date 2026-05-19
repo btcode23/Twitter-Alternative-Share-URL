@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X/Twitter Alternative Share URL
 // @namespace    https://github.com/btcode23
-// @version      0.5.3
+// @version      0.5.4
 // @description  Adds a button to share a tweet with an alternative URL to the "X" link
 // @author       btcode23
 // @license      MIT
@@ -91,8 +91,8 @@ function designButton(tweet) {
         iconPathStye.stroke = 'rgba(29, 161, 242, 1)';
     });
 
-    // return to original style when mouseleave event
-    newIcon.addEventListener('mouseleave', function() {
+    // return to original style when mouseout event
+    newIcon.addEventListener('mouseout', function() {
         backgroundElement.backgroundColor = '';
         iconPathStye.stroke = iconOriginalColor;
     });
