@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X/Twitter Alternative Share URL
 // @namespace    https://github.com/btcode23
-// @version      0.5.4
+// @version      0.5.5
 // @description  Adds a button to share a tweet with an alternative URL to the "X" link
 // @author       btcode23
 // @license      MIT
@@ -49,7 +49,7 @@ function displayConfirmation() {
     }, 1000);
 }
 
-function copyAlternativeTwitterUrl(tweet) {
+function copyAlternativeXUrl(tweet) {
     // the part of the tweet with time seems to give the path to the tweet
     let tweetPath = tweet.querySelector('a:has(time)').getAttribute('href');
 
@@ -100,7 +100,7 @@ function designButton(tweet) {
     // copy link using alternative domain
     newIcon.addEventListener('click', function(e) {
         e.stopPropagation();
-        copyAlternativeTwitterUrl(tweet);
+        copyAlternativeXUrl(tweet);
     });
 }
 
@@ -126,33 +126,33 @@ function addNewShareButtons() {
         });
 })();
 
-// change the alternative URL for twitter
+// change the alternative URL for X
 GM_registerMenuCommand('Setting', () => config());
 
 function config() {
-    let configPopupContainer = document.getElementById('ConfigTwitterFixUrlContainer')
+    let configPopupContainer = document.getElementById('ConfigXFixUrlContainer')
     if (!configPopupContainer) {
         configPopupContainer = document.createElement('div');
     }
-    configPopupContainer.id = 'ConfigTwitterFixUrlContainer';
+    configPopupContainer.id = 'ConfigXFixUrlContainer';
     configPopupContainer.style.cssText = 'position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: rgba(51,51,51,0.7);';
     document.body.appendChild(configPopupContainer);
 
     const configPopup = document.createElement('form');
-    configPopup.innerHTML = '<p style="text-align: center;">Twitter Fix URL Config</p>';
+    configPopup.innerHTML = '<p style="text-align: center;">X Fix URL Config</p>';
     configPopup.style.cssText = 'position: fixed; top: 50%; left: 50%; padding: 10px; margin-top: -150px; margin-left: -150px; width: 325px; height: 200px; background-color: black; border: 2px solid white; border-radius: 25px; color: white; font-size: 24px;  fontFamily: "Arial, sans-serif"';
 
     const formFontSize = 'font-size: 18px;';
     const altXUrlLabel = document.createElement('label');
     altXUrlLabel.style.cssText = formFontSize;
-    altXUrlLabel.setAttribute('for', 'AltUrlTwttierFixUrl');
+    altXUrlLabel.setAttribute('for', 'AltUrlXFixUrl');
     altXUrlLabel.innerHTML = 'Alternative URL X :';
 
     const altXUrlInput = document.createElement('input');
     altXUrlInput.style.cssText = formFontSize + ' width: calc(100% - 12px); padding: 5px'
     altXUrlInput.setAttribute('type', 'text');
-    altXUrlInput.setAttribute('id', 'AltUrlTwttierFixUrl');
-    altXUrlInput.setAttribute('name', 'AltUrlTwttierFixUrl');
+    altXUrlInput.setAttribute('id', 'AltUrlXFixUrl');
+    altXUrlInput.setAttribute('name', 'AltUrlXFixUrl');
     altXUrlInput.setAttribute('value', GM_getValue('ALT_X_URL'));
 
     configPopup.append(altXUrlLabel);
@@ -197,7 +197,7 @@ function config() {
     configPopupContainer.appendChild(configPopup);
 
     document.addEventListener('mouseup', function(e) {
-        if (e.target.id == 'ConfigTwitterFixUrlContainer') {
+        if (e.target.id == 'ConfigXFixUrlContainer') {
             configPopupContainer.style.display = 'none';
         }
     });
