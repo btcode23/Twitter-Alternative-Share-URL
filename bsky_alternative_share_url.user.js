@@ -1,38 +1,31 @@
 // ==UserScript==
-// @name         Twitter+Bsky Alternative Share URL
+// @name         Bsky Alternative Share URL
 // @namespace    https://github.com/btcode23
-// @version      0.5.2
-// @description  Adds a button to share a tweet with an alternative URL to the "X" link
+// @version      0.5.4
+// @description  Adds a button to share a thread with an alternative URL to the "Bsky" link
 // @author       btcode23
 // @license      MIT
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
-// @match        https://twitter.com/*
-// @match        https://x.com/*
 // @match        https://bsky.app/*
-// @icon         https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png
+// @icon         https://web-cdn.bsky.app/static/favicon-32x32.png
 
-// @updateURL    https://raw.githubusercontent.com/btcode23/Twitter-Alternative-Share-URL/main/twitter+bsky_alternative_share_url.user.js
-// @downloadURL   https://raw.githubusercontent.com/btcode23/Twitter-Alternative-Share-URL/main/twitter+bsky_alternative_share_url.user.js
-
+// @downloadURL https://raw.githubusercontent.com/btcode23/Twitter-Alternative-Share-URL/main/bsky_alternative_share_url.user.js
+// @updateURL https://raw.githubusercontent.com/btcode23/Twitter-Alternative-Share-URL/main/bsky_alternative_share_url.user.js
 // ==/UserScript==
 
-const baseXUrl = 'https://fixvx.com';
-const baseBskyUrl = 'https://bskx.app';
+const baseXUrl = 'https://bskx.app';
 
-if (GM_getValue('ALT_X_URL') == undefined) {
-    GM_setValue('ALT_X_URL', baseXUrl);
-}
-if (GM_getValue('ALT_BSKY_URL') == undefined) {
-    GM_setValue('ALT_BSKY_URL', baseBskyUrl);
+if (GM_getValue('ALT_Bsky_URL') == undefined) {
+    GM_setValue('ALT_Bsky_URL', baseXUrl);
 }
 
 const svg = '<path d="M8 5.00005C7.01165 5.00082 6.49359 5.01338 6.09202 5.21799C5.71569 5.40973 5.40973 5.71569 5.21799 6.09202C5 6.51984 5 7.07989 5 8.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H15.8C16.9201 21 17.4802 21 17.908 20.782C18.2843 20.5903 18.5903 20.2843 18.782 19.908C19 19.4802 19 18.9201 19 17.8V8.2C19 7.07989 19 6.51984 18.782 6.09202C18.5903 5.71569 18.2843 5.40973 17.908 5.21799C17.5064 5.01338 16.9884 5.00082 16 5.00005M8 5.00005V7H16V5.00005M8 5.00005V4.70711C8 4.25435 8.17986 3.82014 8.5 3.5C8.82014 3.17986 9.25435 3 9.70711 3H14.2929C14.7456 3 15.1799 3.17986 15.5 3.5C15.8201 3.82014 16 4.25435 16 4.70711V5.00005M12 11V17M12 17L10 15M12 17L14 15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>';
 
 function displayConfirmation() {
-    const layers = document.getElementById('layers');
+    const layers = document.getElementById('root');
 
     let confirmation = document.getElementById('confirmCopyAltLink');
     if (!confirmation) {
@@ -55,42 +48,24 @@ function displayConfirmation() {
     }, 1000);
 }
 
-function copyAlternativeTwitterUrl(tweet) {
-    // the part of the tweet with time seems to give the path to the tweet
-    let tweetPath;
-    if (["x.com", "twitter.com"].includes(window.location.hostname)){
-        tweetPath = tweet.querySelector('a:has(time)').getAttribute('href');
-    } else {
-        tweetPath = tweet.querySelector('a[role="link"][href*="post"]').getAttribute('href');
-    }
+function copyAlternativeBskyUrl(thread) {
+    // the part of the thread with time seems to give the path to the thread
+    let threadPath = thread.querySelector('a[role="link"][href*="post"]').getAttribute('href');
 
     // new share URL
-    let newUrl;
-    if (["x.com", "twitter.com"].includes(window.location.hostname)){
-        newUrl = GM_getValue('ALT_X_URL') + tweetPath;
-    } else {
-        newUrl = GM_getValue('ALT_BSKY_URL') + tweetPath;
-    }
+    let newUrl = GM_getValue('ALT_Bsky_URL') + threadPath;
 
     navigator.clipboard.writeText(newUrl);
     displayConfirmation();
 }
 
-function designButton(tweet) {
+function designButton(thread) {
     let otherIcon;
-    if (["x.com", "twitter.com"].includes(window.location.hostname)){
-        otherIcon = tweet.querySelector('button[aria-label="Share post"]').parentElement.parentElement;
-    } else {
-        otherIcon = tweet.querySelector('button[aria-label="Open share menu"]').parentElement;
-    }
+    otherIcon = thread.querySelector('button[aria-label="Open share menu"]').parentElement;
 
     const newIcon = otherIcon.cloneNode(true);
     newIcon.classList.add('custom-copy-icon');
-    if (["x.com", "twitter.com"].includes(window.location.hostname)){
-        otherIcon.parentElement.insertBefore(newIcon, otherIcon.sibling);
-    } else {
-        otherIcon.parentElement.insertBefore(newIcon, otherIcon.nextSibling);
-    }
+    otherIcon.parentElement.insertBefore(newIcon, otherIcon.nextSibling);
 
     newIcon.querySelector('svg').innerHTML = svg; // add clipboard svg
     const icon = newIcon.querySelector('svg');
@@ -103,51 +78,34 @@ function designButton(tweet) {
     newIcon.style.display = computedContainerStyle.display;
     newIcon.style.width = computedContainerStyle.width;
     newIcon.style.height = computedContainerStyle.height;
-    if (["x.com", "twitter.com"].includes(window.location.hostname)){
-        newIcon.style.marginLeft = (parseFloat(computedContainerStyle.width) * 0.3) + "px";
-    }
+    // newIcon.style.marginLeft = (parseFloat(computedContainerStyle.width) * 0.3) + "px";
 
     const backgroundElement = icon.previousElementSibling;
 
-    // highlight icon when mouseover event using twitter blue color
     // should look the same as the other icons
     newIcon.addEventListener('mouseover', function() {
-        if (["x.com", "twitter.com"].includes(window.location.hostname)){
-            backgroundElement.style.backgroundColor = 'rgba(29, 161, 242, 0.1)';
-            newIcon.querySelector('path').style.stroke = 'rgba(29, 161, 242, 1)';
-        } else {
-            newIcon.style.borderRadius = '50%';
-            newIcon.style.backgroundColor = getComputedStyle(document.querySelector('[data-testid="userAvatarImage"]')).backgroundColor;
-        }
+        newIcon.style.borderRadius = '50%';
+        newIcon.style.backgroundColor = getComputedStyle(document.querySelector('[data-testid="userAvatarImage"]')).backgroundColor;
     });
 
     // return to original style when mouseleave event
     newIcon.addEventListener('mouseleave', function() {
-        if (["x.com", "twitter.com"].includes(window.location.hostname)){
-            backgroundElement.style.backgroundColor = '';
-            newIcon.querySelector('path').style.stroke = iconOriginalColor;
-        } else {
-            newIcon.style.backgroundColor = '';
-        }
+        newIcon.style.backgroundColor = '';
     });
 
     // copy link using alternative domain
     newIcon.addEventListener('click', function(e) {
         e.stopPropagation();
-        copyAlternativeTwitterUrl(tweet);
+        copyAlternativeBskyUrl(thread);
     });
 }
 
 function addNewShareButtons() {
-    let tweets;
-    if (["x.com", "twitter.com"].includes(window.location.hostname)){
-        tweets = document.querySelectorAll('article[data-testid="tweet"]');
-    } else {
-        tweets = document.querySelectorAll('div[data-testid^="feedItem"]');
-    }
-    tweets.forEach(tweet => {
-        if (!tweet.querySelector('.custom-copy-icon')) {
-            designButton(tweet);
+    let threads = document.querySelectorAll('div[data-testid^="feedItem"], div[data-testid^="postThreadItem"]');
+
+    threads.forEach(thread => {
+        if (!thread.querySelector('.custom-copy-icon')) {
+            designButton(thread);
         }
     });
 }
@@ -155,7 +113,7 @@ function addNewShareButtons() {
 (function() {
     'use strict';
 
-    // add new share button to each loaded tweet
+    // add new share button to each loaded thread
     const observer = new MutationObserver(addNewShareButtons);
     observer.observe(
         document.body, {
@@ -164,54 +122,38 @@ function addNewShareButtons() {
         });
 })();
 
-// change the alternative URL for twitter
+// change the alternative URL for bsky
 GM_registerMenuCommand('Setting', () => config());
 
 function config() {
-    let configPopupContainer = document.getElementById('ConfigTwitterFixUrlContainer')
+    let configPopupContainer = document.getElementById('ConfigBskyFixUrlContainer')
     if (!configPopupContainer) {
         configPopupContainer = document.createElement('div');
     }
-    configPopupContainer.id = 'ConfigTwitterFixUrlContainer';
+    configPopupContainer.id = 'ConfigBskyFixUrlContainer';
     configPopupContainer.style.cssText = 'position: fixed; width: 100%; height: 100%; left: 0; top: 0; background: rgba(51,51,51,0.7);';
     document.body.appendChild(configPopupContainer);
 
     const configPopup = document.createElement('form');
-    configPopup.innerHTML = '<p style="text-align: center;">Twitter Fix URL Config</p>';
-    configPopup.style.cssText = 'position: fixed; top: 50%; left: 50%; padding: 10px; margin-top: -150px; margin-left: -150px; width: 325px; height: 300px; background-color: black; border: 2px solid white; border-radius: 25px; color: white; font-size: 24px;  fontFamily: "Arial, sans-serif"';
+    configPopup.innerHTML = '<p style="text-align: center;">Bsky Fix URL Config</p>';
+    configPopup.style.cssText = 'position: fixed; top: 50%; left: 50%; padding: 10px; margin-top: -150px; margin-left: -150px; width: 325px; height: 200px; background-color: black; border: 2px solid white; border-radius: 25px; color: white; font-size: 24px;  fontFamily: "Arial, sans-serif"';
 
     const formFontSize = 'font-size: 18px;';
     const altXUrlLabel = document.createElement('label');
     altXUrlLabel.style.cssText = formFontSize;
-    altXUrlLabel.setAttribute('for', 'AltUrlTwttierFixUrl');
-    altXUrlLabel.innerHTML = 'Alternative URL X :';
+    altXUrlLabel.setAttribute('for', 'AltUrlBskyFixUrl');
+    altXUrlLabel.innerHTML = 'Alternative URL Bsky :';
 
     const altXUrlInput = document.createElement('input');
     altXUrlInput.style.cssText = formFontSize + ' width: calc(100% - 12px); padding: 5px'
     altXUrlInput.setAttribute('type', 'text');
-    altXUrlInput.setAttribute('id', 'AltUrlTwttierFixUrl');
-    altXUrlInput.setAttribute('name', 'AltUrlTwttierFixUrl');
-    altXUrlInput.setAttribute('value', GM_getValue('ALT_X_URL'));
+    altXUrlInput.setAttribute('id', 'AltUrlBskyFixUrl');
+    altXUrlInput.setAttribute('name', 'AltUrlBskyFixUrl');
+    altXUrlInput.setAttribute('value', GM_getValue('ALT_Bsky_URL'));
 
     configPopup.append(altXUrlLabel);
     configPopup.append(document.createElement('br'));
     configPopup.append(altXUrlInput);
-
-    const altBskyUrlLabel = document.createElement('label');
-    altBskyUrlLabel.style.cssText = formFontSize;
-    altBskyUrlLabel.setAttribute('for', 'AltUrlTwttierFixUrl');
-    altBskyUrlLabel.innerHTML = 'Alternative URL Bluesky :';
-
-    const altBskyUrlInput = document.createElement('input');
-    altBskyUrlInput.style.cssText = formFontSize + ' width: calc(100% - 12px); padding: 5px'
-    altBskyUrlInput.setAttribute('type', 'text');
-    altBskyUrlInput.setAttribute('id', 'AltUrlTwttierFixUrl');
-    altBskyUrlInput.setAttribute('name', 'AltUrlTwttierFixUrl');
-    altBskyUrlInput.setAttribute('value', GM_getValue('ALT_BSKY_URL'));
-
-    configPopup.append(altBskyUrlLabel);
-    configPopup.append(document.createElement('br'));
-    configPopup.append(altBskyUrlInput);
 
     const buttonCSS = formFontSize + ' width: 75px; height: 30px; border: 2px solid white; text-align: center; padding: 0px; border-radius: 10px; margin-left: 19px;';
 
@@ -239,8 +181,7 @@ function config() {
     altUrlSubmitButton.style.cssText = buttonCSS;
     altUrlSubmitButton.innerHTML = 'Submit';
     altUrlSubmitButton.addEventListener('click', function(e) {
-        GM_setValue('ALT_X_URL', altXUrlInput.value);
-        GM_setValue('ALT_BSKY_URL', altBskyUrlInput.value);
+        GM_setValue('ALT_Bsky_URL', altXUrlInput.value);
         configPopupContainer.style.display = 'none';
     });
 
@@ -252,7 +193,7 @@ function config() {
     configPopupContainer.appendChild(configPopup);
 
     document.addEventListener('mouseup', function(e) {
-        if (e.target.id == 'ConfigTwitterFixUrlContainer') {
+        if (e.target.id == 'ConfigBskyFixUrlContainer') {
             configPopupContainer.style.display = 'none';
         }
     });
