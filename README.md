@@ -1,6 +1,6 @@
 # Twitter-Fix-URL
 ### Links: https://greasyfork.org/en/scripts/491145-twitter-fix-url | https://github.com/btcode23/Twitter-Alternative-Share-URL</br>
-This project is mainly for Twitter/X. There is a Bsky version of this code at https://github.com/btcode23/Twitter-Alternative-Share-URL/blob/main/bsky_alternative_share_url.user.js but won't be updated as quickly.
+This project is mainly for Twitter/X. There is a Bsky version of this code at https://github.com/btcode23/Twitter-Alternative-Share-URL/blob/main/bsky_alternative_share_url.user.js but will receive limited ongoing support.
 
 ### This script adds a button to share a tweet with an alterantive URL than the default "X" link.</br>The purpose is to easily share tweets to another platform but with a different URL for embedding reasons.</br>(Example: posting on Discord using fixvx)
 
