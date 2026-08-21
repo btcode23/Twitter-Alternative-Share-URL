@@ -10,4 +10,4 @@ This project is mainly for Twitter/X. There is a Bsky version of this code at ht
 ### By default, the alternative is "fixvx". However, this can be changed in the settings.
 ![alt text](https://raw.githubusercontent.com/btcode23/Twitter-Fix-URL/main/config-screenshot.png)
 ##### (can be accessed by clicking the menu command. pressing "reset" returns the URL to the default, vxTwitter.)
-###### tested using Tampermonkey
+###### tested using Tampermonkey on Firefox
